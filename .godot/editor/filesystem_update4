@@ -1,7 +1,6 @@
-res://cup/cup.tscn
-res://Animal/animal.tscn
 res://level/level.tscn
-res://singletons/signal_manager.gd
 res://Animal/animal.gd
+res://Animal/animal.tscn
+res://cup/cup.tscn
+res://singletons/signal_manager.gd
 res://level/level.gd
-res://utils/utils.gd
