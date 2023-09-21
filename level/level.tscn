@@ -13,7 +13,7 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("1_3cfuy")
 
 [node name="Cup" parent="." instance=ExtResource("2_k4pnj")]
-position = Vector2(205, 460)
+position = Vector2(684, 456)
 
 [node name="DebugLabel" type="Label" parent="."]
 custom_minimum_size = Vector2(400, 160)
