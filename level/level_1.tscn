@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2aebxxvw07n0"]
+
+[ext_resource type="PackedScene" uid="uid://cxqr5fqpsvlf4" path="res://level/level.tscn" id="1_a4tjy"]
+[ext_resource type="PackedScene" uid="uid://b58nyoso8le3h" path="res://cup/cup.tscn" id="2_3lfdw"]
+
+[node name="Level1" instance=ExtResource("1_a4tjy")]
+
+[node name="Cup" parent="." index="4" instance=ExtResource("2_3lfdw")]
+position = Vector2(380, 439)

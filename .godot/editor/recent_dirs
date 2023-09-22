@@ -1,4 +1,8 @@
 res://singletons
+res://level
+res://assets/fonts
+res://level_button
+res://main
+res://water
 res://Animal
 res://cup
-res://level

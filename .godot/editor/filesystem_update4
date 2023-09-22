@@ -2,3 +2,16 @@ res://level/level.tscn
 res://cup/cup.tscn
 res://Animal/animal.tscn
 res://Animal/animal.gd
+res://singletons/game_manager.gd
+res://cup/cup.gd
+res://singletons/signal_manager.gd
+res://water/water.tscn
+res://water/water.gd
+res://main/main.tscn
+res://level_button/level_button.tscn
+res://level_button/level_button.gd
+res://level/level_1.tscn
+res://level/level_2.tscn
+res://level/level_3.tscn
+res://level/level.gd
+res://singletons/score_manager.gd
