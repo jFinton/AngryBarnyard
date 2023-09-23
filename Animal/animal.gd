@@ -4,11 +4,13 @@ extends RigidBody2D
 @onready var stretch_sound: AudioStreamPlayer2D = $StretchSound
 @onready var launch_sound: AudioStreamPlayer2D = $LaunchSound
 @onready var collision_sound: AudioStreamPlayer2D = $CollisionSound
+@onready var arrow_sprite: Sprite2D = $ArrowSprite
 
 
 const DRAG_LIM_MIN: Vector2 = Vector2(-60, 0)
 const DRAG_LIM_MAX: Vector2 = Vector2(0, 60)
-const IMPULSE_MULT: float = 16.0
+const IMPULSE_MULT: float = 17.0
+const IMPULSE_MAX: float = 1200.0
 const FIRE_DELAY: float = 0.25
 const STOPPED: float = 0.1
 
@@ -23,12 +25,15 @@ var _dragged_vector: Vector2 = Vector2.ZERO
 var _last_dragged_position: Vector2 = Vector2.ZERO
 var _last_drag_amount: float = 0.0
 var _fired_time: float = 0.0
+var _arrow_scale_x: float = 0.0
 var _last_collision_count: int = 0
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_start = global_position
+	_arrow_scale_x = arrow_sprite.scale.x
+	arrow_sprite.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -77,6 +82,14 @@ func update_debug_label() -> void:
 	SignalManager.on_update_debug_label.emit(s) # Emits to Level
 
 
+func scale_arrow() -> void:
+	var imp_len = get_impulse().length()
+	var perc = imp_len / IMPULSE_MAX
+	
+	arrow_sprite.scale.x = (_arrow_scale_x * perc) + _arrow_scale_x
+	arrow_sprite.rotation = (_start - global_position).angle()
+
+
 func stopped_rolling() -> bool:
 	if get_contact_count() > 0:
 		if abs(linear_velocity.y) < STOPPED and abs(angular_velocity) < STOPPED:
@@ -104,6 +117,7 @@ func grab_it() -> void:
 	_dragging = true
 	_drag_start = get_global_mouse_position()
 	_last_dragged_position = _drag_start
+	arrow_sprite.show()
 
 
 func drag_it() -> void:
@@ -116,10 +130,13 @@ func drag_it() -> void:
 		stretch_sound.play()
 		_stretch_has_played = true
 	
-	_dragged_vector = gmp - _drag_start
+	_dragged_vector = gmp - _drag_start # The Impulse Vector
 	_dragged_vector.x = clampf(_dragged_vector.x, DRAG_LIM_MIN.x, DRAG_LIM_MAX.x)
 	_dragged_vector.y = clampf(_dragged_vector.y, DRAG_LIM_MIN.y, DRAG_LIM_MAX.y)
+	
 	global_position = _start + _dragged_vector
+	
+	scale_arrow()
 
 
 func release_it() -> void:
@@ -129,6 +146,8 @@ func release_it() -> void:
 	apply_central_impulse(get_impulse())
 	stretch_sound.stop()
 	launch_sound.play()
+	arrow_sprite.hide()
+	ScoreManager.attempt_made()
 
 
 func get_impulse() -> Vector2:
@@ -147,7 +166,7 @@ func _on_screen_exited() -> void:
 	die()
 
 
-func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if _dragging or _released: return
 	
 	if event.is_action_pressed("drag"):

@@ -1,6 +1,8 @@
+res://launch_area
+res://assets/fonts
+res://game_ui
 res://singletons
 res://level
-res://assets/fonts
 res://level_button
 res://main
 res://water
